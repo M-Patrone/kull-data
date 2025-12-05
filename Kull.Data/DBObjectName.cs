@@ -82,7 +82,7 @@ namespace Kull.Data
                 return "\"" + input.Replace("\"", "\"\"") + "\"";
             for (int i = 0; i < input.Length; i++)
             {
-                if(i==0 && (input[0] == '#'|| input[0] == '@'))
+                if (i == 0 && (input[0] == '#' || input[0] == '@'))
                 {
                     continue;//Ok to start with # or @ (temp table / table variables)
                 }
@@ -309,6 +309,29 @@ namespace Kull.Data
         public static bool operator >=(DBObjectName? left, DBObjectName? right)
         {
             return ReferenceEquals(left, null) ? ReferenceEquals(right, null) : left.CompareTo(right) >= 0;
+        }
+
+
+        /// <summary>
+        /// Method which escapes the schema and table name with square brackets.
+        /// Created because to enable dots in the schema name
+        /// Example [dbo].[Accounts]
+        /// 
+        /// Precondition: the database, schema nor the table could have a square bracket in the name 
+        /// </summary>
+        /// <param name="withDatabase">Enable to get also the database, e.g. '[master].[dbo].[people]'</param>
+        /// <returns>a string with the escaped database object with square brackets</returns>
+        public string GetEscapedDbObjectName(bool withDatabase = false)
+        {
+            string schemaRemovedBracket = (this.Schema ?? "dbo").Replace("[", "").Replace("]", "");
+            string tableNameRemovedBracket = this.Name.Replace("[", "").Replace("]", "");
+            if (withDatabase && !string.IsNullOrEmpty(this.DataBaseName) && !string.IsNullOrWhiteSpace(this.DataBaseName))
+            {
+                string databaseRemovedBracket = this.DataBaseName?.Replace("[", "").Replace("]", "");
+
+                return $"[{databaseRemovedBracket}].[{schemaRemovedBracket}].[{tableNameRemovedBracket}]";
+            }
+            return $"[{schemaRemovedBracket}].[{tableNameRemovedBracket}]";
         }
     }
 }

@@ -33,5 +33,30 @@ namespace Kull.Data.Test
             DBObjectName dBObjectName = new DBObjectName("dbo", "taes saf");
             Assert.AreEqual(dBObjectName.ToString(false, true), "dbo.\"taes saf\"");
         }
+
+        [TestMethod]
+        public void TestEscapedDbObjectName()
+        {
+            DBObjectName dBObjectName = new DBObjectName("dbo", "BulkInsert");
+            Assert.AreEqual(dBObjectName.GetEscapedDbObjectName(false), "[dbo].[BulkInsert]");
+        }
+        [TestMethod]
+        public void TestEscapedDbObjectNameWithDots()
+        {
+            DBObjectName dBObjectName = new DBObjectName("Sales.DataDelivery", "BulkInsert.2025");
+            Assert.AreEqual(dBObjectName.GetEscapedDbObjectName(false), "[Sales.DataDelivery].[BulkInsert.2025]");
+        }
+        [TestMethod]
+        public void TestEscapedDbObjectNameWithDotsEmptyDB()
+        {
+            DBObjectName dBObjectName = new DBObjectName("Sales.DataDelivery", "BulkInsert.2025");
+            Assert.AreEqual(dBObjectName.GetEscapedDbObjectName(true), "[Sales.DataDelivery].[BulkInsert.2025]");
+        }
+        [TestMethod]
+        public void TestEscapedDbObjectNameWithDotsDB()
+        {
+            DBObjectName dBObjectName = new DBObjectName("Sales.DataDelivery", "BulkInsert.2025", "Kull");
+            Assert.AreEqual(dBObjectName.GetEscapedDbObjectName(true), "[Kull].[Sales.DataDelivery].[BulkInsert.2025]");
+        }
     }
 }

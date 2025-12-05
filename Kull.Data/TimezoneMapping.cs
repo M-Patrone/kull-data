@@ -45,7 +45,7 @@ namespace Kull.Data
             }
             try
             {
-#if NET6_0 // In .Net 6 unix id's should work
+#if NET8_0_OR_GREATER // In .Net 8 or greater unix id's should work
 
                 if (System.Environment.OSVersion.Platform == PlatformID.Win32NT && TimeZoneInfo.TryConvertIanaIdToWindowsId(value.Trim(), out string? winId))
                     return TimeZoneInfo.FindSystemTimeZoneById(winId);
@@ -59,7 +59,7 @@ namespace Kull.Data
             catch (System.TimeZoneNotFoundException)
             {
                 var sysTimeZones = System.TimeZoneInfo.GetSystemTimeZones();
-                var utcOffset = value.StartsWith("(UTC") ? TimeSpan.Parse(value.Substring("(UTC+".Length-1, "+01:00".Length).Replace("+", "")) : (TimeSpan?)null;
+                var utcOffset = value.StartsWith("(UTC") ? TimeSpan.Parse(value.Substring("(UTC+".Length - 1, "+01:00".Length).Replace("+", "")) : (TimeSpan?)null;
                 var towns = value.Contains(" ") ? value.Substring(value.IndexOf(" ")).Split(',').Select(s => s.Trim()).ToArray() : Array.Empty<string>();
                 foreach (var st in sysTimeZones)
                 {
