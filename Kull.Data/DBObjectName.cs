@@ -321,7 +321,7 @@ namespace Kull.Data
         /// </summary>
         /// <param name="withDatabase">Enable to get also the database, e.g. '[master].[dbo].[people]'</param>
         /// <returns>a string with the escaped database object with square brackets</returns>
-        public string GetEscapedDbObjectName(bool withDatabase)
+        public string GetEscapedDbObjectName(bool withDatabase = false)
         {
             string schemaRemovedBracket = (this.Schema ?? "dbo").Replace("[", "").Replace("]", "");
             string tableNameRemovedBracket = this.Name.Replace("[", "").Replace("]", "");
