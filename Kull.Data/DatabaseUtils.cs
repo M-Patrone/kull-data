@@ -578,12 +578,12 @@ namespace Kull.Data
         /// <returns></returns>
         public static DbConnection GetConnectionFromConfig(string configName)
         {
-            string env = Environment.GetEnvironmentVariable("ASPNETCORE_Environment");
+            string env = Environment.GetEnvironmentVariable("ASPNETCORE_Environment") ?? Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
             var builder = new Microsoft.Extensions.Configuration.ConfigurationBuilder()
                 .SetBasePath(System.IO.Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", true, false);
-            if(env != null)
+            if (env != null)
             {
                 builder.AddJsonFile($"appsettings.{env}.json", true, false);
             }
@@ -622,8 +622,8 @@ namespace Kull.Data
                 .SetBasePath(System.IO.Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", true, false);
 
-            string env = Environment.GetEnvironmentVariable("ASPNETCORE_Environment");
-            if(env != null)
+            string env = Environment.GetEnvironmentVariable("ASPNETCORE_Environment") ?? Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"); ;
+            if (env != null)
             {
                 builder.AddJsonFile($"appsettings.{env}.json", true, false);
             }
